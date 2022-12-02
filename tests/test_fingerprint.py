@@ -141,6 +141,19 @@ class TestFingerprint:
         assert isinstance(data[1], list)
         assert isinstance(data[2], list)
 
+    def test_run_indexed_trajectory(self, fp_simple, u, ligand_ag, protein_ag):
+        frames = [1, 0]
+        fp_simple.run(
+            u.trajectory[frames], ligand_ag, protein_ag, residues=None, progress=False
+        )
+        assert hasattr(fp_simple, "ifp")
+        ifp = fp_simple.ifp[0]
+        ifp.pop("Frame")
+        data = list(ifp.values())[0]
+        assert isinstance(data[0], np.ndarray)
+        assert isinstance(data[1], list)
+        assert isinstance(data[2], list)
+
     def test_run_from_iterable(self, fp_simple, protein_mol):
         path = str(datapath / "vina" / "vina_output.sdf")
         lig_suppl = list(sdf_supplier(path))

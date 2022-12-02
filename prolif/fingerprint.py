@@ -494,9 +494,13 @@ class Fingerprint:
         try:
             n_frames = traj.n_frames
         except AttributeError:
-            # sliced trajectory
-            frames = range(traj.start, traj.stop, traj.step)
-            traj = lig.universe.trajectory
+            try:
+                #FrameIteratorIndexed
+                frames = traj.frames
+            except AttributeError:
+                #sliced trajectory
+                frames = range(traj.start, traj.stop, traj.step)
+                traj = lig.universe.trajectory
         else:
             frames = range(n_frames)
         lig_kwargs, prot_kwargs = converter_kwargs or ({}, {})
